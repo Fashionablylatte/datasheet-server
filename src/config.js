@@ -1,12 +1,13 @@
+import { fluxus } from './fluxus'
 import { timemap } from './lib'
 
 export default {
   gsheets: [],
   xlsx: [
     {
-      name: 'timemap_data',
-      path: 'data/timemap_data.xlsx',
-      tabs: timemap.default
+      name: 'fluxus_consolidated',
+      path: 'data/fluxus_consolidated.xlsx',
+      tabs: fluxus.default
     }
   ]
 }
