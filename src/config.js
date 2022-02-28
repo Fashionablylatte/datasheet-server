@@ -1,12 +1,13 @@
 import { timemap } from './lib'
+import BP from './lib/blueprinters'
 
 export default {
   gsheets: [],
   xlsx: [
     {
-      name: 'timemap_data',
-      path: 'data/timemap_data.xlsx',
-      tabs: timemap.default
+      name: 'incidents',
+      path: 'data/incidents.xlsx',
+      tabs: { coding: BP.deeprows}
     }
   ]
 }
