@@ -1,0 +1,27 @@
+// ABR Cases
+let
+    Source = Excel.Workbook(File.Contents("D:\Libraries\Documents\CS_Brown\cs1951I\datasheet-server\data\fluxus_consolidated.xlsx"), null, true),
+    #"ABR Cases_Sheet" = Source{[Item="ABR Cases",Kind="Sheet"]}[Data],
+    #"Promoted Headers" = Table.PromoteHeaders(#"ABR Cases_Sheet", [PromoteAllScalars=true]),
+    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"GUID", type text}, {"Priority", type text}, {"Follow up", type text}, {"Date", type text}, {"Time (fb post)", type text}, {"Location", type text}, {"Description ABR", type text}, {"Sources", type text}, {"Further Sources", type text}, {"Verified?", type text}, {"Filenames", type text}, {"Filenames 2", type text}, {"Correspondent Cases", type text}, {"Geo- locatable", type text}, {"Chrono- locatable", type text}, {"No. of people", type any}, {"Vulnerabilities", type text}, {"Type of incident", type text}, {"Stay on land", type text}, {"Theft", type text}, {"Physical violence", type text}, {"Deaths", type any}, {"Actors involved", type text}, {"Units", type text}, {"Notes", type text}, {"Post URL", type text}, {"Link 2", type text}, {"Link 3", type text}, {"Link 4", type text}, {"Column30", type text}, {"Column31", type text}, {"Column32", type any}, {"Column33", type any}, {"Legend", type text}, {"Column35", type any}, {"Column36", type any}}),
+    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Description ABR", "Description"}, {"Time (fb post)", "Time"}, {"Sources", "Sources 1"}, {"Further Sources", "Sources 2"}, {"Post URL", "Link 1"}})
+in
+    #"Renamed Columns"
+
+// TCG Cases
+let
+    Source = Excel.Workbook(File.Contents("D:\Libraries\Documents\CS_Brown\cs1951I\datasheet-server\data\fluxus_consolidated.xlsx"), null, true),
+    #"TCG Cases_Sheet" = Source{[Item="TCG Cases",Kind="Sheet"]}[Data],
+    #"Promoted Headers" = Table.PromoteHeaders(#"TCG Cases_Sheet", [PromoteAllScalars=true]),
+    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"GUID", type text}, {"Priority", type text}, {"Date", type text}, {"Time", type text}, {"Location", type text}, {"Lat", type text}, {"Long", type text}, {"Description", type text}, {"Sources", type text}, {"Verified?", type text}, {"Filenames", type text}, {"Filenames 2", type text}, {"Correspondent Cases", type text}, {"Geo- locatable", type text}, {"Chrono- locatable", type text}, {"No. of people", Int64.Type}, {"Vulnerabilities", type text}, {"Type of incident", type text}, {"Theft", type text}, {"Physical violence", type text}, {"Deaths", type any}, {"Actors involved", type text}, {"Units", type text}, {"Notes", type text}, {"Notes Verification", type text}, {"Link 1", type text}, {"Link 2", type text}, {"Link 3 (tr media)", type text}, {"Column29", type any}}),
+    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Link 3 (tr media)", "Link 3"}, {"Sources", "Sources 1"}})
+in
+    #"Renamed Columns"
+
+// Consolidated
+let
+    Source = Table.Combine({#"TCG Cases", #"ABR Cases"}),
+    #"Removed Other Columns" = Table.SelectColumns(Source,{"GUID", "Date", "Time", "Location", "Lat", "Long", "Description", "Sources 1", "Link 1", "Link 2", "Link 3", "Sources 2", "Link 4"}),
+    #"Changed Type" = Table.TransformColumnTypes(#"Removed Other Columns",{{"GUID", type text}, {"Date", type date}, {"Time", type datetime}, {"Location", type text}, {"Lat", type text}, {"Long", type text}, {"Description", type text}, {"Sources 1", type text}, {"Link 1", type text}, {"Link 2", type text}, {"Link 3", type text}, {"Sources 2", type text}, {"Link 4", type text}})
+in
+    #"Changed Type"
